@@ -1,12 +1,12 @@
 # never-null-mutex
-a mutex with non-zero default state and implicit uninitialized state, an idea, which I herewith consider public and attributable to degski, he/her with access to this repo.
+a mutex with non-zero default, and implicit uninitialized state. I herewith consider public and attributable to degski, he/her with access to this repo.
 
 
 ### desciption
-in programming for concurrency, the use of atomic flags (as last member) is mandated to indicate construction-finalized of objects under construction. iff we use a non-zero mutex as the last object member, the mutex itself can stand-in as construction-finalized-flag while the object is under construction (the lock allows fine-grained locking, at the lowest possible level, at **'zero'** cost). the uninitialized state is implicit by not being any of the possible valid states. such read write spinlock, can be designed at zero-extra-cost as compared to a read spinlock of the same design.
+in programming for concurrency, the use of atomic flags (as last member) is mandated to indicate construction-finalized of objects under construction. iff we use a non-zero mutex as the last object member, the mutex itself can stand-in as **construction-finalized-flag** while the object is under construction. after construction, the underlying `std::atomic` is repurposed as a mutex, and allows for fine-grained locking, at the lowest possible level, at **'zero'** cost). the uninitialized state is implicit by not being any of the possible valid states. a read-write-spinlock, can be designed at zero-extra-cost as compared to a read-spinlock of the same design.
 
 
-an example of `never_null_mutex` can be implemented like so:
+an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemented like so:
 
 
     template<typename FlagType = char>
