@@ -9,7 +9,7 @@ in [the art of] programming for concurrency, the use of atomic flags (last membe
 an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemented like so:
 
 
-        template<typename FlagType = char>
+    template<typename FlagType = char>
     struct never_null_mutex final {
 
         never_null_mutex ( ) noexcept                     = default;
