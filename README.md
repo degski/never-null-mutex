@@ -9,7 +9,7 @@ in [the art of] programming for concurrency, the use of atomic flags (last membe
 an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemented like so:
 
 
-    template<typename FlagType = char>
+        template<typename FlagType = char>
     struct never_null_mutex final {
 
         never_null_mutex ( ) noexcept                     = default;
@@ -20,11 +20,11 @@ an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemen
         never_null_mutex & operator= ( never_null_mutex const & )     = delete;
         never_null_mutex & operator= ( never_null_mutex && ) noexcept = delete;
 
-        static constexpr int uninitialized               = 0;
-        static constexpr int unlocked                    = 1;
-        static constexpr int locked_reader               = 2;
-        static constexpr int unlocked_locked_reader_mask = 3;
-        static constexpr int locked_writer               = 4;
+        static constexpr FlagType uninitialized               = 0;
+        static constexpr FlagType unlocked                    = 1;
+        static constexpr FlagType locked_reader               = 2;
+        static constexpr FlagType unlocked_locked_reader_mask = 3;
+        static constexpr FlagType locked_writer               = 4;
 
         ALWAYS_INLINE void lock ( ) noexcept {
             do {
@@ -48,7 +48,7 @@ an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemen
         
         [[nodiscard]] ALWAYS_INLINE bool try_lock ( ) const noexcept {
             return unlocked_locked_reader_mask &
-                   const_cast<std::atomic<int> *> ( &flag )->exchange ( locked_reader, std::memory_order_acquire );
+                   const_cast<std::atomic<FlagType> *> ( &flag )->exchange ( locked_reader, std::memory_order_acquire );
         }
         
         ALWAYS_INLINE void unlock ( ) const noexcept {
@@ -56,6 +56,6 @@ an example of `never_null_mutex` (a test-test-and-swap spinlock) can be implemen
         }
 
         private:
-        std::atomic<int> flag = { unlocked };
+        std::atomic<FlagType> flag = { unlocked };
     };
 
