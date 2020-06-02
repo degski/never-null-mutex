@@ -1,5 +1,5 @@
 # never-null-mutex
-a mutex with non-zero default, and implicit uninitialized state. I herewith consider public and attributable to degski, he/her with access to this repo.
+a mutex with non-zero default, and implicit uninitialized state. I herewith consider this idea public and attributable to degski, he/her with access to this repo.
 
 
 ### desciption
